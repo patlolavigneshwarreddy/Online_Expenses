@@ -11,7 +11,7 @@ spring:
         - id: expenses-server
           uri: lb://EXPENSES-SERVER
           predicates:
-            - Path=/expenses/**
+            - Path=/expenses/**,/reportsummery/**
         - id: category-server
           uri: lb://CATEGORY-SERVER
           predicates:

@@ -31,7 +31,7 @@ public class RegisterController {
 
 	@PostMapping("/register")
 	public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
-		log.info("Register API starting");
+//		log.info("Register API starting");
 
 		if (userRepository.findByUsername(request.username()).isPresent()) {
 			throw new UserExistsException(request.username());
@@ -46,7 +46,7 @@ public class RegisterController {
 		user.setRole(Optional.ofNullable(request.role()).orElse("USER"));
 
 		userRepository.save(user);
-		log.info("User registered successfully for {}", request.username());
+//		log.info("User registered successfully for {}", request.username());
         RegisterResponse registerResponse = new RegisterResponse(user.getUserId(), user.getUsername(), user.getRole(),
 				"User registered successfully");
         return  ResponseEntity.status(HttpStatus.CREATED).body(registerResponse);

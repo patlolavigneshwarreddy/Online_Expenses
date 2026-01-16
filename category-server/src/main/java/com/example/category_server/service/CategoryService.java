@@ -15,4 +15,8 @@ public interface CategoryService {
 	Optional<Category> fetchById(Long id);
 	
 	List<Category> findAll();
+
+	Category updateCategory(Long id, Category updateCategory);
+
+	void deleteCategory(Long id);
 }

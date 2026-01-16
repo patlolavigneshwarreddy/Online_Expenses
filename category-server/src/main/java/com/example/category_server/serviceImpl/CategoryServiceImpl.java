@@ -1,7 +1,5 @@
 package com.example.category_server.serviceImpl;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +35,28 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> findAll() {
 		// TODO Auto-generated method stub
 		return categoryRepo.findAll();
+	}
+
+	@Override
+	public Category updateCategory(Long id, Category updateCategory) {
+		// TODO Auto-generated method stub
+		Category existing = categoryRepo.findById(id)
+				.orElseThrow(() -> new RuntimeException("Category not found with id " + id));
+
+		// Update only allowed fields
+		if (updateCategory.getCategoryname() != null) {
+			existing.setCategoryname(updateCategory.getCategoryname());
+		}
+		if (updateCategory.getDescription() != null) {
+			existing.setDescription(updateCategory.getDescription());
+		}
+		// Save will automatically update `updatetime` because of @UpdateTimestamp
+		return categoryRepo.save(existing);
+	}
+
+	@Override
+	public void deleteCategory(Long id) {
+		categoryRepo.deleteById(id);
 	}
 
 }

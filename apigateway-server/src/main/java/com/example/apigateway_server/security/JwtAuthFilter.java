@@ -66,7 +66,7 @@ public class JwtAuthFilter implements GlobalFilter{
             return exchange.getResponse().setComplete();
         }
 
-        if ((path.startsWith("/expenses") || path.startsWith("/category")) && ("ADMIN".equals(role) )) {
+        if ((path.startsWith("/expenses") || path.startsWith("/category") || path.startsWith("/reportsummery")) && ("ADMIN".equals(role) )) {
             exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
             return exchange.getResponse().setComplete();
         }
