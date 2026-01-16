@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: apigateway-server
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/auth/**
+        - id: expenses-server
+          uri: lb://EXPENSES-SERVER
+          predicates:
+            - Path=/expenses/**
+        - id: category-server
+          uri: lb://CATEGORY-SERVER
+          predicates:
+            - Path=/category/**
+
+server:
+  port: 8080
