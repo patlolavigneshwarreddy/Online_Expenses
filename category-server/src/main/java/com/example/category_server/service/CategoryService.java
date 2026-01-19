@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.category_server.dto.CategoryDto;
 import com.example.category_server.entity.Category;
 
 @Service
@@ -19,4 +20,6 @@ public interface CategoryService {
 	Category updateCategory(Long id, Category updateCategory);
 
 	void deleteCategory(Long id);
+
+	Optional<CategoryDto> getCategoryNameById(Long CategoryId);
 }

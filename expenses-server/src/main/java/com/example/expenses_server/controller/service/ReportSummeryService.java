@@ -15,4 +15,5 @@ public interface ReportSummeryService {
 	
 	 //Category Monthly wise summary 
 	 public List<MonthlyCategorySummary> getMonthlyCategorySummary(Long userId);
+
 }

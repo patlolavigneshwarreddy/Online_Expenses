@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.category_server.dto.CategoryDto;
 import com.example.category_server.entity.Category;
 import com.example.category_server.service.CategoryService;
 
@@ -37,6 +39,14 @@ public class CategoryController {
 		
 	}
 	
+	@GetMapping("name/{id}")
+	public ResponseEntity<Optional<CategoryDto>> getCategoryNameById(@PathVariable Long id){
+	Optional<CategoryDto> category =	categoryService.getCategoryNameById(id);
+		return new ResponseEntity<Optional<CategoryDto>>(category, HttpStatus.OK);
+		
+	}
+
+	
 	@GetMapping
 	public ResponseEntity<List<Category>> getAllCategories(){
 		List<Category> categories = categoryService.findAll();
@@ -54,8 +64,8 @@ public class CategoryController {
 	public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
 		categoryService.deleteCategory(id);
 		return ResponseEntity.ok("category deleted");
-		
-		
 	}
+	
+	
 	
 }

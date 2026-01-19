@@ -3,6 +3,13 @@ spring:
   name: expenses-server
  config:
   import: optional:configserver:http://localhost:8888
+ cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
 
 ##.....................local values..............
  datasource:
@@ -18,5 +25,7 @@ spring:
    hibernate: 
     format_sql: true
 server:
- port: 8082    
+ port: 8082  
+ 
+  
 

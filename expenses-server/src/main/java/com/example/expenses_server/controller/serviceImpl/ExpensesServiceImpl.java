@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.expenses_server.controller.repo.ExpensesRepo;
 import com.example.expenses_server.controller.service.ExpensesService;
 import com.example.expenses_server.entity.Expenses;
+import com.example.expenses_server.exceptions.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 
@@ -51,7 +52,7 @@ public class ExpensesServiceImpl implements ExpensesService {
 	@Override
 	public Expenses findbyId(Long id) {
 		Expenses existing = expensesRepo.findById(id)
-				.orElseThrow(() -> new RuntimeException("Expense not found with id " + id));
+				.orElseThrow(() -> new ResourceNotFoundException("Expense not found with id " + id));
 		return existing;
 	}
 

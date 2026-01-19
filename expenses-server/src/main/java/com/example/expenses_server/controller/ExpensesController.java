@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.expenses_server.controller.record.MonthlyCategorySummary;
 import com.example.expenses_server.controller.record.MonthlySummary;
 import com.example.expenses_server.controller.service.ExpensesService;
 import com.example.expenses_server.controller.service.ReportSummeryService;
+import com.example.expenses_server.dto.CategoryDto;
 import com.example.expenses_server.entity.Expenses;
+import com.example.expenses_server.exceptions.ResourceNotFoundException;
+import com.example.expenses_server.feignClient.CategoryClient;
 
 @RestController
 @RequestMapping("/expenses")
@@ -32,6 +34,9 @@ public class ExpensesController {
 	
 	@Autowired
 	ReportSummeryService reportsummery;
+	
+	@Autowired
+	CategoryClient categoryClient;
 
 	@PostMapping()
 	public ResponseEntity<Expenses> addexpenses(@RequestHeader("X-User-Id") Long userId,
@@ -87,7 +92,6 @@ public class ExpensesController {
 		expensesService.deletebyId(id);
 		return ResponseEntity.ok("delete expenses by Id");
 	}
-
 	
 	    @GetMapping("/monthly")
 	    public ResponseEntity<List<MonthlySummary>> getMonthlySummary(
@@ -102,6 +106,12 @@ public class ExpensesController {
 	        List<MonthlyCategorySummary> summaries = reportsummery.getMonthlyCategorySummary(userId);
 	        return ResponseEntity.ok(summaries);
 	    }
-	
+
+	    @GetMapping("category/name/{id}")
+		public ResponseEntity<CategoryDto> getCategoryNameById(@PathVariable Long id){
+		CategoryDto category =	categoryClient.getCategoryById(id);
+			return new ResponseEntity<CategoryDto>(category, HttpStatus.OK);
+			
+		}
 
 }

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.category_server.dto.CategoryDto;
 import com.example.category_server.entity.Category;
 import com.example.category_server.repo.CategoryRepo;
 import com.example.category_server.service.CategoryService;
@@ -57,6 +59,12 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void deleteCategory(Long id) {
 		categoryRepo.deleteById(id);
+	}
+
+	@Override
+	public Optional<CategoryDto> getCategoryNameById(Long CategoryId) {
+		
+		return categoryRepo.getCategoryNameById(CategoryId);
 	}
 
 }
