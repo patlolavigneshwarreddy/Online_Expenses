@@ -10,6 +10,7 @@ spring:
           default:
             connectTimeout: 5000
             readTimeout: 5000
+            
 
 ##.....................local values..............
  datasource:
@@ -24,8 +25,13 @@ spring:
   properties: 
    hibernate: 
     format_sql: true
+    
+
+  
 server:
  port: 8082  
+
  
-  
+ 
+
 
