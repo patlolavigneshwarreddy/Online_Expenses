@@ -1,5 +1,6 @@
 package com.example.category_server.controller;
 
+import com.example.category_server.dto.CategoryDto;
 import com.example.category_server.entity.Category;
 import com.example.category_server.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryControllerTest {
@@ -177,5 +187,81 @@ public class CategoryControllerTest {
          // Additional assertions or verifications can be added here
     }
 
-}
+    @Test
+    void addCategory_returnsCreated() {
+        Category category = new Category();
+        category.setCategoryId(1L);
+        doNothing().when(categoryService).addCategory(category);
 
+        ResponseEntity<Category> resp = categoryController.addCategory(category);
+
+        assertEquals(201, resp.getStatusCode().value());
+        assertSame(category, resp.getBody());
+        verify(categoryService).addCategory(category);
+    }
+
+    @Test
+    void getCategoryById_returnsOk() {
+        Category category = new Category();
+        category.setCategoryId(2L);
+        when(categoryService.fetchById(2L)).thenReturn(Optional.of(category));
+
+        ResponseEntity<Optional<Category>> resp = categoryController.getCategoryById(2L);
+
+        assertEquals(200, resp.getStatusCode().value());
+        assertTrue(resp.getBody().isPresent());
+        assertEquals(2L, resp.getBody().get().getCategoryId());
+    }
+
+    @Test
+    void getCategoryNameById_returnsDto() {
+        CategoryDto dto = new CategoryDto(3L, "food");
+        when(categoryService.getCategoryNameById(3L)).thenReturn(Optional.of(dto));
+
+        ResponseEntity<Optional<CategoryDto>> resp = categoryController.getCategoryNameById(3L);
+
+        assertEquals(200, resp.getStatusCode().value());
+        assertTrue(resp.getBody().isPresent());
+        assertEquals("food", resp.getBody().get().getName());
+    }
+
+    @Test
+    void getAllCategories_returnsList() {
+        Category a = new Category();
+        Category b = new Category();
+        List<Category> list = Arrays.asList(a, b);
+        when(categoryService.findAll()).thenReturn(list);
+
+        ResponseEntity<List<Category>> resp = categoryController.getAllCategories();
+
+        assertEquals(200, resp.getStatusCode().value());
+        assertEquals(2, resp.getBody().size());
+    }
+
+    @Test
+    void updateCategory_returnsUpdated() {
+        Category update = new Category();
+        update.setCategoryname("new");
+        Category saved = new Category();
+        saved.setCategoryId(5L);
+        saved.setCategoryname("new");
+
+        when(categoryService.updateCategory(5L, update)).thenReturn(saved);
+
+        ResponseEntity<Category> resp = categoryController.updateCategory(5L, update);
+
+        assertEquals(200, resp.getStatusCode().value());
+        assertEquals(saved, resp.getBody());
+    }
+
+    @Test
+    void deleteCategory_returnsOkMessage() {
+        doNothing().when(categoryService).deleteCategory(6L);
+
+        ResponseEntity<String> resp = categoryController.deleteCategory(6L);
+
+        assertEquals(200, resp.getStatusCode().value());
+        assertEquals("category deleted", resp.getBody());
+        verify(categoryService).deleteCategory(6L);
+    }
+}
