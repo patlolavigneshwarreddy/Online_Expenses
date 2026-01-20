@@ -110,6 +110,11 @@ public class ExpensesController {
 	    @GetMapping("category/name/{id}")
 		public ResponseEntity<CategoryDto> getCategoryNameById(@PathVariable Long id){
 		CategoryDto category =	categoryClient.getCategoryById(id);
+		if (category.getCategoryId() == -1L) {
+	        return ResponseEntity
+	                .status(HttpStatus.SERVICE_UNAVAILABLE)
+	                .body(category);
+	    }
 			return new ResponseEntity<CategoryDto>(category, HttpStatus.OK);
 			
 		}
