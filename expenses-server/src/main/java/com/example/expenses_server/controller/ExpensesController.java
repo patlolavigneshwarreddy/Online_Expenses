@@ -56,6 +56,11 @@ public class ExpensesController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Expenses> getbyId(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id) {
 		Expenses expenses = expensesService.findbyId(id);
+		if (expenses.getId() == -1L) {
+	        return ResponseEntity
+	                .status(HttpStatus.NOT_FOUND)
+	                .body(expenses);
+	    }
 		return ResponseEntity.ok(expenses);
 	}
 
@@ -87,7 +92,7 @@ public class ExpensesController {
 		return ResponseEntity.ok(expenses);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deletebyId(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id) {
 		expensesService.deletebyId(id);
 		return ResponseEntity.ok("delete expenses by Id");

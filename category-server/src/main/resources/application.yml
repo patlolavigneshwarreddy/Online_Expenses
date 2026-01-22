@@ -2,7 +2,7 @@ spring:
  application:
   name: category-server
  config:
-  import: optional:configserver:http://localhost:8080
+  import: optional:configserver:http://localhost:8888
 
 #.....................local values..............
  datasource:
