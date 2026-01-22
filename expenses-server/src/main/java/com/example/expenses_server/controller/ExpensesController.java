@@ -31,10 +31,10 @@ public class ExpensesController {
 
 	@Autowired
 	ExpensesService expensesService;
-	
+
 	@Autowired
 	ReportSummeryService reportsummery;
-	
+
 	@Autowired
 	CategoryClient categoryClient;
 
@@ -57,10 +57,8 @@ public class ExpensesController {
 	public ResponseEntity<Expenses> getbyId(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id) {
 		Expenses expenses = expensesService.findbyId(id);
 		if (expenses.getId() == -1L) {
-	        return ResponseEntity
-	                .status(HttpStatus.NOT_FOUND)
-	                .body(expenses);
-	    }
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(expenses);
+		}
 		return ResponseEntity.ok(expenses);
 	}
 
@@ -80,14 +78,24 @@ public class ExpensesController {
 	@GetMapping(value = "amount-range")
 	public ResponseEntity<List<Expenses>> getAllExpensesbyAmountRange(@RequestHeader("X-User-Id") Long userId,
 			@RequestParam("minAmount") BigDecimal minAmount, @RequestParam("maxAmount") BigDecimal maxAmount) {
-		List<Expenses> expenses = expensesService.getAllExpensesbyAmountRange(userId, minAmount, maxAmount);
-		return ResponseEntity.ok(expenses);
+		if (minAmount.compareTo(BigDecimal.ZERO) < 0 || maxAmount.compareTo(BigDecimal.ZERO) < 0) {
+			throw new IllegalArgumentException("Amounts must be positive values");
+		}
+
+		if (minAmount.compareTo(maxAmount) > 0) {
+			throw new IllegalArgumentException("minAmount cannot be greater than maxAmount");
+		}
+		try {
+			List<Expenses> expenses = expensesService.getAllExpensesbyAmountRange(userId, minAmount, maxAmount);
+			return ResponseEntity.ok(expenses);
+		} catch (IllegalArgumentException ex) {
+			return ResponseEntity.badRequest().body(null); // or return an error object
+		}
 	}
 
 	@GetMapping(value = "date-range")
 	public ResponseEntity<List<Expenses>> getAllExpensesbyDateRange(@RequestHeader("X-User-Id") Long userId,
-			@RequestParam("startDate") LocalDateTime startDate,
-			@RequestParam("endDate") LocalDateTime endDate) {
+			@RequestParam("startDate") LocalDateTime startDate, @RequestParam("endDate") LocalDateTime endDate) {
 		List<Expenses> expenses = expensesService.getAllExpensesbyDateRange(userId, startDate, endDate);
 		return ResponseEntity.ok(expenses);
 	}
@@ -97,31 +105,28 @@ public class ExpensesController {
 		expensesService.deletebyId(id);
 		return ResponseEntity.ok("delete expenses by Id");
 	}
-	
-	    @GetMapping("/monthly")
-	    public ResponseEntity<List<MonthlySummary>> getMonthlySummary(
-	            @RequestHeader("X-User-Id") Long userId) {
-	        List<MonthlySummary> summaries = reportsummery.getMonthlySummary(userId);
-	        return ResponseEntity.ok(summaries);
-	    }
 
-	    @GetMapping("/monthlycategory")
-	    public ResponseEntity<List<MonthlyCategorySummary>> getMonthlyCategorySummary(
-	            @RequestHeader("X-User-Id") Long userId) {
-	        List<MonthlyCategorySummary> summaries = reportsummery.getMonthlyCategorySummary(userId);
-	        return ResponseEntity.ok(summaries);
-	    }
+	@GetMapping("/monthly")
+	public ResponseEntity<List<MonthlySummary>> getMonthlySummary(@RequestHeader("X-User-Id") Long userId) {
+		List<MonthlySummary> summaries = reportsummery.getMonthlySummary(userId);
+		return ResponseEntity.ok(summaries);
+	}
 
-	    @GetMapping("category/name/{id}")
-		public ResponseEntity<CategoryDto> getCategoryNameById(@PathVariable Long id){
-		CategoryDto category =	categoryClient.getCategoryById(id);
+	@GetMapping("/monthlycategory")
+	public ResponseEntity<List<MonthlyCategorySummary>> getMonthlyCategorySummary(
+			@RequestHeader("X-User-Id") Long userId) {
+		List<MonthlyCategorySummary> summaries = reportsummery.getMonthlyCategorySummary(userId);
+		return ResponseEntity.ok(summaries);
+	}
+
+	@GetMapping("category/name/{id}")
+	public ResponseEntity<CategoryDto> getCategoryNameById(@PathVariable Long id) {
+		CategoryDto category = categoryClient.getCategoryById(id);
 		if (category.getCategoryId() == -1L) {
-	        return ResponseEntity
-	                .status(HttpStatus.SERVICE_UNAVAILABLE)
-	                .body(category);
-	    }
-			return new ResponseEntity<CategoryDto>(category, HttpStatus.OK);
-			
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(category);
 		}
+		return new ResponseEntity<CategoryDto>(category, HttpStatus.OK);
+
+	}
 
 }
