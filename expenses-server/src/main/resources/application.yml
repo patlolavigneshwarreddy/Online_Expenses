@@ -2,7 +2,7 @@ spring:
  application:
   name: expenses-server
  config:
-  import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://localhost:8888
  cloud:
     openfeign:
       client:
@@ -13,25 +13,25 @@ spring:
             
 
 ##.....................local values..............
- datasource:
-  url: jdbc:mysql://localhost:3306/expenses?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-  username: root
-  password: root
-
- jpa:
-  hibernate: 
-   ddl-auto: update
-  show-sql: true
-  properties: 
-   hibernate: 
-    format_sql: true
-    
-
-  
-server:
- port: 8082  
-
- 
- 
+# datasource:
+#  url: jdbc:mysql://localhost:3306/expenses?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+#  username: root
+#  password: root
+#
+# jpa:
+#  hibernate: 
+#   ddl-auto: update
+#  show-sql: true
+#  properties: 
+#   hibernate: 
+#    format_sql: true
+#    
+#
+#  
+#server:
+# port: 8082  
+#
+# 
+# 
 
 
