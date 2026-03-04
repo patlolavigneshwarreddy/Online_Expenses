@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.2.0</version> <!-- Use the latest compatible version -->
+			<version>3.5.0</version> <!-- Use the latest compatible version -->
 		</dependency>
 
 
@@ -129,6 +129,18 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<!-- Spring Boot tracing integration -->
+			<dependency>
+				<groupId>io.micrometer</groupId>
+				<artifactId>micrometer-tracing-bridge-brave</artifactId>
+			</dependency>
+
+			<!-- Zipkin exporter for Micrometer -->
+			<dependency>
+				<groupId>io.zipkin.reporter2</groupId>
+				<artifactId>zipkin-reporter-brave</artifactId>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

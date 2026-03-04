@@ -10,4 +10,18 @@ eureka:
     fetch-registry: false         # Server does not fetch registry
   server:
     enable-self-preservation: false
+#logs 
+logging:
+ pattern:
+    level: "%5p [${spring.application.name:},traceId=%X{traceId:-},spanId=%X{spanId:-}]"
+ file:
+    name: C:\Users\sowja\OneDrive\Documents\online_expenses_tracker_logs\eureka_logs\eureka_logs.log
+ level:
+    ROOT: INFO                       # Default global log level
+    org.springframework: WARN         # Spring internal logs at WARN
+    com.sowja.demoh2: DEBUG 
+ logback:
+    rollingpolicy:
+      max-file-size: 1MB       # maximum size per log file
+      max-history: 5      
 

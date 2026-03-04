@@ -7,4 +7,25 @@ spring:
        git:
          uri: https://github.com/patlolavigneshwarreddy/Expenses.git
 server:
- port: 8888         
+ port: 8888  
+ 
+eureka:
+ client:
+   register-with-eureka: true   # register this service with Eureka
+   fetch-registry: true          # fetch the registry of other services
+   service-url:
+     defaultZone: http://localhost:8761/eureka/
+#logs 
+logging:
+ pattern:
+    level: "%5p [${spring.application.name:},traceId=%X{traceId:-},spanId=%X{spanId:-}]"
+ file:
+    name: C:\Users\sowja\OneDrive\Documents\online_expenses_tracker_logs\config_logs\config.log
+ level:
+    ROOT: INFO                       # Default global log level
+    org.springframework: WARN         # Spring internal logs at WARN
+    com.sowja.demoh2: DEBUG 
+ logback:
+    rollingpolicy:
+      max-file-size: 1MB       # maximum size per log file
+      max-history: 5                 

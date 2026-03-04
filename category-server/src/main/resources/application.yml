@@ -3,7 +3,28 @@ spring:
   name: category-server
  config:
   import: optional:configserver:http://localhost:8888
-
+eureka:
+ client:
+   register-with-eureka: true   # register this service with Eureka
+   fetch-registry: true          # fetch the registry of other services
+   service-url:
+     defaultZone: http://localhost:8761/eureka/   # Eureka Server URL 
+ instance:
+    prefer-ip-address: true   # <<< critical  
+#logs 
+logging:
+ pattern:
+    level: "%5p [${spring.application.name:},traceId=%X{traceId:-},spanId=%X{spanId:-}]"
+ file:
+    name: C:\Users\sowja\OneDrive\Documents\online_expenses_tracker_logs\expenses_logs\expenses.log
+ level:
+    ROOT: INFO                       # Default global log level
+    org.springframework: WARN         # Spring internal logs at WARN
+    com.sowja.demoh2: DEBUG 
+ logback:
+    rollingpolicy:
+      max-file-size: 1MB       # maximum size per log file
+      max-history: 5  
 #.....................local values..............
 # datasource:
 #  url: jdbc:mysql://localhost:3306/category?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
